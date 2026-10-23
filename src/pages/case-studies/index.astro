@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import { href } from '../../lib/url';
+
+const caseStudies = (await getCollection('case-studies'))
+  .filter((c) => c.data.published)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Technical case studies"
+  description="Case studies by Louis Gimeno on AWS EKS troubleshooting and GitLab CI/CD Docker pipeline work, with clear limits on what is and is not claimed."
+  path="/case-studies/"
+>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Case studies</p>
+      <h1>Technical case studies</h1>
+      <p class="lede">
+        Detailed, honest accounts of real work. Each one says what I investigated, recommended, configured, and verified,
+        and which parts I do not claim.
+      </p>
+      <div class="grid grid--2">
+        {caseStudies.map((c) => <CaseStudyCard slug={c.id} {...c.data} />)}
+      </div>
+      <p class="muted" style="margin-top:2rem">
+        Public hands-on projects are listed on the <a href={href('/projects/')}>projects page</a>.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,162 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CaseStudyCard from '../components/CaseStudyCard.astro';
+import { href } from '../lib/url';
+import { profile } from '../data/profile';
+import { experience } from '../data/experience';
+import { credentials } from '../data/credentials';
+
+const caseStudies = (await getCollection('case-studies'))
+  .filter((c) => c.data.published)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const selectedExperience = experience.filter((e) => ['hcl-cloud-l2', 'stratpoint-devops', 'stratpoint-cloud'].includes(e.id));
+const featuredCreds = credentials.filter((c) => c.featured);
+
+const focus = [
+  {
+    title: 'Cloud infrastructure',
+    text: 'Operating and troubleshooting workloads on AWS, Azure, and Google Cloud, including compute, networking, and storage.',
+  },
+  {
+    title: 'Kubernetes and containers',
+    text: 'Docker, Kubernetes, and Helm in day-to-day troubleshooting and deployment contexts.',
+  },
+  {
+    title: 'CI/CD and automation',
+    text: 'GitLab CI/CD and Jenkins pipelines, with Terraform, CloudFormation, Bash, and Python for automation.',
+  },
+  {
+    title: 'Troubleshooting and reliability',
+    text: 'Log-based root-cause investigation, incident support, and written findings other engineers can act on.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.fullName,
+  alternateName: profile.name,
+  jobTitle: profile.headline,
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Adamson University' },
+  ...(Astro.site ? { url: Astro.site.toString() } : {}),
+  sameAs: [profile.links.linkedin, profile.links.github].filter(Boolean),
+};
+---
+
+<Base
+  title={profile.name}
+  description="Louis Gimeno is a Cloud Platform and DevOps engineer working with AWS, Kubernetes, GitLab CI/CD, Terraform, and cloud infrastructure troubleshooting."
+  path="/"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container">
+      <h1>
+        <span class="name">{profile.name}</span>
+        <span class="headline">{profile.headline}</span>
+      </h1>
+      <p class="hero__support">{profile.support}</p>
+      <p class="hero__intro">{profile.intro}</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={href('/case-studies/')}>View Technical Work</a>
+        <a class="btn btn--secondary" href={href('/contact/')}>Contact Me</a>
+        {
+          profile.links.resume && (
+            <a class="btn btn--secondary" href={profile.links.resume} download>
+              Download Resume
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="focus-h">
+    <div class="container">
+      <div class="section__head"><h2 id="focus-h">Core focus</h2></div>
+      <div class="grid grid--2">
+        {
+          focus.map((f) => (
+            <div class="card">
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="exp-h">
+    <div class="container">
+      <div class="section__head">
+        <h2 id="exp-h">Selected experience</h2>
+        <a href={href('/experience/')}>Full experience</a>
+      </div>
+      <ul class="timeline">
+        {
+          selectedExperience.map((e) => (
+            <li>
+              <div class="timeline__when">
+                <strong>{e.dates}</strong>
+                {e.org}
+              </div>
+              <div>
+                <h3>{e.role}</h3>
+                <p>{e.summary}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cs-h">
+    <div class="container">
+      <div class="section__head">
+        <h2 id="cs-h">Technical case studies</h2>
+        <a href={href('/case-studies/')}>All case studies</a>
+      </div>
+      <p class="lede">Each case study states what I investigated, recommended, configured, and verified, and what I do not claim.</p>
+      <div class="grid grid--2">
+        {caseStudies.map((c) => <CaseStudyCard slug={c.id} {...c.data} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cred-h">
+    <div class="container">
+      <div class="section__head">
+        <h2 id="cred-h">Certifications</h2>
+        <a href={href('/credentials/')}>All credentials and education</a>
+      </div>
+      <ul class="cred-list">
+        {
+          featuredCreds.map((c) => (
+            <li>
+              <span>
+                {c.name}
+                <span class="cred-list__issuer">{c.issuer}</span>
+              </span>
+              <span class="cred-list__date">{c.date}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contact-h">
+    <div class="container">
+      <h2 id="contact-h">Get in touch</h2>
+      <p class="lede">Open to Cloud Platform, DevOps, SRE, and cloud infrastructure roles.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={`mailto:${profile.email}`}>Email me</a>
+        <a class="btn btn--secondary" href={href('/contact/')}>Other ways to reach me</a>
+      </div>
+    </div>
+  </section>
+</Base>

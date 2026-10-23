@@ -1,0 +1,18 @@
+---
+import { href } from '../lib/url';
+import { profile } from '../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>&copy; {year} {profile.fullName}</p>
+    <ul>
+      <li><a href={`mailto:${profile.email}`}>Email</a></li>
+      {profile.links.linkedin && <li><a href={profile.links.linkedin} rel="me noopener">LinkedIn</a></li>}
+      {profile.links.github && <li><a href={profile.links.github} rel="me noopener">GitHub</a></li>}
+      <li><a href={href('/contact/')}>Contact</a></li>
+    </ul>
+  </div>
+</footer>

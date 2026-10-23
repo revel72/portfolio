@@ -1,0 +1,22 @@
+---
+import { href } from '../lib/url';
+
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  status: string;
+  tags: string[];
+}
+const { slug, title, summary, status, tags } = Astro.props;
+---
+
+<a class="card" href={href(`/case-studies/${slug}/`)}>
+  <span class="badge">{status}</span>
+  <h3>{title}</h3>
+  <p>{summary}</p>
+  <ul class="tags" aria-label="Topics">
+    {tags.slice(0, 4).map((t) => <li>{t}</li>)}
+  </ul>
+  <span class="card__more">Read the case study &rarr;</span>
+</a>

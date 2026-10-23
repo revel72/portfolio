@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+---
+
+<Base
+  title="Contact"
+  description="Contact Louis Gimeno about Cloud Platform, DevOps, SRE, and cloud infrastructure roles."
+  path="/contact/"
+>
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Contact</p>
+      <h1>Let's talk</h1>
+      <p class="lede">
+        I'm open to Cloud Platform, DevOps, Site Reliability, and cloud infrastructure roles. Email is the best way to reach
+        me.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={`mailto:${profile.email}`}>{profile.email}</a>
+        {
+          profile.links.resume && (
+            <a class="btn btn--secondary" href={profile.links.resume} download>
+              Download Resume
+            </a>
+          )
+        }
+      </div>
+      {
+        (profile.links.linkedin || profile.links.github) && (
+          <>
+            <h2>Profiles</h2>
+            <ul>
+              {profile.links.linkedin && <li><a href={profile.links.linkedin} rel="me noopener">LinkedIn</a></li>}
+              {profile.links.github && <li><a href={profile.links.github} rel="me noopener">GitHub</a></li>}
+            </ul>
+          </>
+        )
+      }
+    </div>
+  </section>
+</Base>

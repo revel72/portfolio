@@ -1,0 +1,80 @@
+---
+import { href } from '../lib/url';
+import { profile } from '../data/profile';
+
+interface Props {
+  currentPath: string;
+}
+const { currentPath } = Astro.props;
+
+const links = [
+  { label: 'Experience', path: '/experience/' },
+  { label: 'Skills', path: '/skills/' },
+  { label: 'Case studies', path: '/case-studies/' },
+  { label: 'Projects', path: '/projects/' },
+  { label: 'Credentials', path: '/credentials/' },
+  { label: 'About', path: '/about/' },
+  { label: 'Contact', path: '/contact/' },
+];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const normalize = (p: string) => (p.endsWith('/') ? p : `${p}/`);
+const current = normalize(currentPath.startsWith(base) ? currentPath.slice(base.length) || '/' : currentPath);
+const isActive = (p: string) => current === p || current.startsWith(p);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href={href('/')}>{profile.name}</a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={href(l.path)} aria-current={isActive(l.path) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <button type="button" class="theme-toggle" id="theme-toggle">
+        <span id="theme-toggle-label">Theme: auto</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Cycles auto -> light -> dark. Storage access is wrapped because it can throw in private modes.
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
+  const label = document.getElementById('theme-toggle-label');
+  const order = ['auto', 'light', 'dark'] as const;
+  type Mode = (typeof order)[number];
+
+  function read(): Mode {
+    try {
+      const v = localStorage.getItem('theme');
+      if (v === 'light' || v === 'dark') return v;
+    } catch {}
+    return 'auto';
+  }
+  function apply(mode: Mode) {
+    if (mode === 'auto') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', mode);
+    if (label) label.textContent = `Theme: ${mode}`;
+    btn?.setAttribute('aria-label', `Color theme: ${mode}. Activate to change.`);
+    try {
+      if (mode === 'auto') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', mode);
+    } catch {}
+  }
+
+  let mode = read();
+  apply(mode);
+  btn?.addEventListener('click', () => {
+    mode = order[(order.indexOf(mode) + 1) % order.length];
+    apply(mode);
+  });
+</script>

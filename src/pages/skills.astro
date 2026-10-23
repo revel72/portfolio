@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import { skillGroups } from '../data/skills';
+---
+
+<Base
+  title="Technical skills"
+  description="Technical skills of Louis Gimeno grouped by domain: AWS, Azure, GCP, Kubernetes, Docker, Terraform, GitLab CI/CD, monitoring, and scripting."
+  path="/skills/"
+>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Skills</p>
+      <h1>Technical skills</h1>
+      <p class="lede">
+        Grouped by the kind of work they support. Exposure, working proficiency, and demonstrated project experience are not
+        the same thing, so qualifiers appear where they matter. See the case studies for evidence of specific skills.
+      </p>
+      {
+        skillGroups.map((g) => (
+          <div class="skill-group">
+            <h2 style="font-size:1.1rem">{g.title}</h2>
+            <ul>
+              {g.skills.map((s) => (
+                <li>
+                  {s.name}
+                  {s.note && <span class="skill-note">{s.note}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>

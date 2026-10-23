@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import { experience } from '../data/experience';
+---
+
+<Base
+  title="Experience"
+  description="Professional experience of Louis Gimeno: Cloud L2 Support Engineer, DevOps Engineer, Cloud Engineer, and QA Intern roles across cloud infrastructure, Kubernetes, and CI/CD."
+  path="/experience/"
+>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Experience</p>
+      <h1>Professional experience</h1>
+      <p class="lede">Most recent first. Customer and internal details are omitted for confidentiality.</p>
+      <ul class="timeline">
+        {experience.map((entry) => <ExperienceItem entry={entry} />)}
+      </ul>
+    </div>
+  </section>
+</Base>

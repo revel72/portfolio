@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { href } from '../lib/url';
+---
+
+<Base
+  title="About"
+  description="How Louis Gimeno moved from computer science and QA into cloud engineering, DevOps, and cloud support engineering."
+  path="/about/"
+>
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">About</p>
+      <h1>From software quality to cloud platform engineering</h1>
+      <p class="lede">
+        My career has moved step by step toward cloud platform work, and each step built a skill I use today.
+      </p>
+
+      <h2>Education and QA foundations</h2>
+      <p>
+        I studied Computer Science at Adamson University and graduated Magna Cum Laude. My first professional role was a QA
+        internship at Stratpoint Technologies, where I wrote test plans and test cases, did manual and automated testing, and
+        worked in an Agile team. That work taught me to investigate systematically and to validate a result before calling it
+        done.
+      </p>
+
+      <h2>Cloud engineering and DevOps</h2>
+      <p>
+        I then worked as a Cloud Engineer and later a DevOps Engineer at Stratpoint. The work included monitoring and
+        operating AWS and Azure resources, working with CI/CD pipelines in Jenkins and GitLab, using Terraform and
+        CloudFormation, and working with Docker and Kubernetes.
+      </p>
+
+      <h2>Cloud L2 support and complex troubleshooting</h2>
+      <p>
+        At HCLSoftware I work as a Cloud L2 Support Engineer on HCL Workload Automation and UnO, across SaaS and on-premises
+        environments. The role centers on investigating complex product, application, integration, and infrastructure issues,
+        analyzing logs to find likely root causes, reproducing problems, and working with development and DevOps teams.
+      </p>
+
+      <h2>How I work</h2>
+      <ul>
+        <li>I investigate from evidence: logs, events, and monitoring data.</li>
+        <li>I document findings and resolutions so other engineers can act on them.</li>
+        <li>I collaborate with development, DevOps, and engineering teams, and communicate technical recommendations clearly.</li>
+        <li>I am careful to separate what I investigated, recommended, and implemented.</li>
+      </ul>
+
+      <h2>Where I am heading</h2>
+      <p>
+        I am interested in cloud platforms, Kubernetes, automation, and reliability. I am building public projects to show that
+        work openly: <a href={href('/projects/')}>see what is planned</a>.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn btn--primary" href={href('/experience/')}>View experience</a>
+        <a class="btn btn--secondary" href={href('/contact/')}>Contact me</a>
+      </div>
+    </div>
+  </section>
+</Base>

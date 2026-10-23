@@ -1,0 +1,27 @@
+---
+import type { ExperienceEntry } from '../data/experience';
+
+interface Props {
+  entry: ExperienceEntry;
+}
+const { entry } = Astro.props;
+const showVerify = import.meta.env.DEV && entry.verifyNote;
+---
+
+<li>
+  <div class="timeline__when">
+    <strong>{entry.dates}</strong>
+    {entry.location}
+  </div>
+  <div>
+    <h3>{entry.role}</h3>
+    <p class="timeline__org">{entry.org}</p>
+    {showVerify && <p class="callout callout--warn"><strong>Verify before launch:</strong> {entry.verifyNote}</p>}
+    <ul>
+      {entry.bullets.map((b) => <li>{b}</li>)}
+    </ul>
+    <ul class="tags" aria-label="Technologies and areas">
+      {entry.technologies.map((t) => <li>{t}</li>)}
+    </ul>
+  </div>
+</li>

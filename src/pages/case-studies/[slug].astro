@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { href } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('case-studies')).filter((c) => c.data.published);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+
+<Base title={d.title} description={d.summary} path={`/case-studies/${entry.id}/`} ogType="article">
+  <article class="section">
+    <div class="container prose">
+      <p class="breadcrumb"><a href={href('/case-studies/')}>&larr; All case studies</a></p>
+      <span class="badge">{d.status}</span>
+      <h1 style="font-size:clamp(1.9rem,4vw,2.6rem)">{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+      <div class="callout callout--warn" role="note">
+        <p><strong>Evidence note:</strong> {d.evidenceNote}</p>
+      </div>
+
+      <h2 style="margin-top:2rem">My contribution</h2>
+      <ul class="contribution">
+        {
+          d.contribution.map((c) => (
+            <li>
+              <span class="contribution__label">
+                {c.label}
+                <span class="contribution__state">{c.claimed ? 'Claimed' : 'Not claimed'}</span>
+              </span>
+              <span>{c.detail}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ul class="tags" aria-label="Technologies">
+        {d.tags.map((t) => <li>{t}</li>)}
+      </ul>
+
+      <Content />
+
+      <hr />
+      <div class="btn-row">
+        <a class="btn btn--secondary" href={href('/case-studies/')}>More case studies</a>
+        <a class="btn btn--primary" href={href('/contact/')}>Contact me</a>
+      </div>
+    </div>
+  </article>
+</Base>
